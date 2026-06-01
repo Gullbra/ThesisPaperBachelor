@@ -1,0 +1,143 @@
+\chapter{Method} \label{cha:method}
+
+To address the research question, this study employs a quantitative experimental setup. 
+In line with the description and definition of an experiment by \textcite{Denscombe2014}, this study manipulated independent variables in order to measure their impact on the dependent variables. 
+This was done for each steganalysis method (RS-Analysis and CNN), and the yielded observations were compared in order to draw conclusions concerning the relative effectiveness of the steganalysis methods.
+
+In this study, the steganographic embedding method and the payload size were used as independent variables, and detection accuracy, true positive rate, and false positive rate as the dependent variables.
+
+\section{Ethical Considerations}
+This study relies entirely on the processing of pre-existing digital data and does not involve human participants. 
+Thus, the ethical concerns regarding informed consent, anonymity, and voluntary participation are not applicable \cite{Denscombe2014}. 
+The BOSSBase 1.01 dataset \cite{Sedighi2016} is a standard academic image library recognized in forensics research. 
+No personal or sensitive data was collected or generated during the experimental process.
+
+The key ethical consideration of this study relates to the “dual-use” of steganography and steganalysis. 
+Steganography can be applied for ethical purposes like protecting privacy and copyrights, it can also be used for malicious purposes like data exfiltration attacks and command and control communication in cyber-attacks. Studying steganalysis, or techniques for detecting steganographic communications, is a positive contribution as it helps forensic specialists in detecting hidden communication channels. 
+Instead of using the research for developing new embedding algorithms that are difficult to be detected, this study sticks to the detection of LSB steganography, which is an example of good security research ethics. 
+
+To ensure scientific integrity, this study takes a the importance of replicability into consideration. 
+Using a public data set with standard evaluation criteria (True Positive Rate, True Negative Rate, False Positive Rate, False Negative Rate, Accuracy) helps ensure that the comparison between the CNN and RS-Analysis is sound, so that the capability of the deep learning approach is not misrepresented for security applications.
+
+Further ethical implications of this study are discussed in section 5.
+
+\section{Experimental Design}
+
+The conduct of the experiment can be examined as a four-step process.
+
+\begin{enumerate}
+    \item Cover Image Selection and Preparation.
+    \item Stego-Image Embedding.
+    \item Implementation of Steganalysis
+    \item Performance Evaluation.
+\end{enumerate}
+
+
+\subsection{Cover Image Preparation}
+\subsubsection{Dataset}
+
+BOSSBase 1.01 was selected due to its established prevalence in the field of steganography research \cite{Sedighi2016}. 
+While the original dataset images were provided in Portable Graymap (.PGM) format, these images were subsequently converted into Portable Network Graphics (.PNG) format. 
+This conversion maintained the lossless nature of the images while providing a closer resemblance to real-world digital environments, where PNG files are significantly more common \cite{QSuccess2025}.
+
+
+\subsection{Stego-Image Generation}
+\subsubsection{Payload Sizes (Embedding Ratios)}
+
+For the size of the embedding message 25\% ($r=0.25$), 50\% ($r=0.50$), and 75\% ($r=0.75$) of the embedding capacity was chosen. 
+
+\subsubsection{LSB Methods}
+Four different LSB-based steganographic methods of varying sophistication were selected for comparative testing. 
+This was done with the goal of increasing the generalizability of the assessment. 
+These were implemented in Python scripts from the theoretical sources listed in Table 3.1.
+
+\begin {table} [h]
+    \centering
+    \begin{tabular}{l p{5cm} p{3cm}} % defines number of columns and their layout 
+        \toprule[1.5pt]
+        \textsc{Method} & \textsc{Description} & \textsc{Sources}\\
+        \midrule
+        \verb|Sequential LSB| & LSB embedding in its simplest form.  & \textcite{Chan2004}\\
+        \midrule[0.5pt]
+        \verb|Randomized LSB| & Use of PRNG for selecting embedding locations. & \textcite{Sharp2001} \\
+        \midrule[0.5pt]
+        \texttt{LSB Matching ($\pm$1)} & Randomly adds or subtracts 1 from the pixel value instead of replacing it. & \textcite{Ker2005}\\
+        \midrule[0.5pt]
+        \verb|Edge Adaptive LSB| & Identifies "noisy" pixels for embedding. & \textcite{Luo2010}\\
+        \bottomrule[1.5pt]
+    \end{tabular}
+    \caption {LSB Methods in this Study} \label{tab:titles2}
+\end{table}
+
+
+\subsection{Steganalysis Implementation}
+\subsubsection{RS-Analysis}
+
+This steganalysis method was implemented in Python, adhering to the specifications outlined by \textcite{Fridrich2001}.
+
+\subsubsection{Convolutional Neural Network (CNN)}
+
+For the ML model, SRNet (Steganalysis Residual Network) \textcite{Boroumand2019} was chosen. 
+This was motivated by its architecture, which aims to extract noise residuals, where the hidden messages might reside, in early layers, before they become suppressed in successive layers \cite{Wang2021}, and its documented performance detecting stego images embedded with advanced steganographic methods \cite{Boroumand2019}.
+
+\subsubsection*{SRNet Implementation and Training Details}
+To ensure full reproducibility, the specific hyperparameters and training configurations utilized for the SRNet model are detailed below.
+
+\paragraph{Weight Initialization}
+The convolutional layers of the network were initialized using a Xavier uniform distribution, with biases set to a constant value of $0.2$. The fully connected (Linear) layers were initialized using a Normal distribution ($\mu=0.0, \sigma=0.01$) with biases set to $0.0$.
+
+\paragraph{Optimizer and Loss Function}
+The network was trained using the Adamax optimizer. The optimizer hyperparameters were configured to $\beta_1 = 0.9$, $\beta_2 = 0.999$, and $\epsilon = 10^{-8}$, with no weight decay applied. The final layer utilizes a LogSoftmax activation, and the model was optimized against a Negative Log-Likelihood Loss (NLLLoss) function.
+
+\paragraph{Training Pipeline and Augmentation}
+A batch size of $20$ was utilized during training. The initial learning rate was set to $0.001$ and was decayed by a factor of $0.1$ every $30$ epochs. To increase robustness, data augmentation was applied to the training set by randomly rotating the input images by $90^\circ$.
+
+\begin{table}[h]
+\centering
+\caption{SRNet training configuration.}
+\label{tab:cnn-hyperparams}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Input size              & $512 \times 512$ grayscale \\
+Train / Val / Test      & 7000 / 1500 / 1500\\
+Batch size              & 16 cover--stego pairs (32 images) \\
+Optimizer               & Adamax \\
+Initial learning rate   & $1 \times 10^{-3}$ \\
+LR schedule             & $\times 0.1$ on validation plateau \\
+Loss                    & Binary cross-entropy \\
+Max epochs              & 30\\
+Early stopping          & patience 10, min.\ delta $1 \times 10^{-4}$ \\
+Augmentation            & 90$^\circ$ rotations, horizontal/vertical flips \\
+Random seed             & 42 \\
+Framework               & PyTorch 2.x\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Performance Metrics}
+
+The results of the experiment were compiled into two tables with several relevant metrics, grouped by embedding technique.
+
+
+\section{Alternative Research Strategies and Methods}
+\subsection{Choice of Dataset}
+\textcite{Sedighi2016} concludes that the choice of cover images has a huge impact on the effectiveness of different steganographic and steganalysis methods. 
+Evaluating effectiveness of these methods on the same cover image source might thus not yield a complete generalizable result. An alternative approach would be to have the cover image source as an independent variable, although this would enlarge the study considerably. 
+
+Another approach would be to focus the study on certain fixed scenarios where cover source and steganographic method are predefined to be the presumed optimal for each other, and then compare different steganalysis methods.
+
+\subsection{Other Steganographic Methods}
+This study does not include more modern steganographic methods like WOW, HUGO, MiPOD, or SUniward. This was done to limit the study, but decreases its usability in a modern context.
+Another approach could include or focus solely on one or more of these methods. 
+
+\subsection{Design Science Research}
+One possible alternative approach that might have been adopted is Design Science Research (DSR), which has been formally introduced by \textcite{ChatterjeeHevner2010}. 
+In DSR, the focus is on developing and assessing a new artifact, such as a new detection algorithm, an improved CNN framework, or an integrated detection scheme based on statistics and deep learning, with the designed artifact being the key research contribution. In this process, knowledge creation occurs by repeated building and testing, followed by communicating design knowledge as the research outcome.
+DSR was taken into consideration but eventually rejected as the main method for use in the current thesis. 
+This is due to the nature of the research question asked, which is comparative in its approach rather than constructive.
+
+\subsection{The Use of AI tools}
+To meet the requirements of academic integrity, the authors wish to acknowledge that AI tools were used in the process of writing this thesis in a supporting role. 
+In particular, AI programs were used for: verifying the spelling and grammar in sentences, proposing rewrites aimed at enhancing the readability of sentences written by the authors, helping find and pinpoint source literature, which was then reviewed, validated, and referenced by the authors directly, and giving support in coding the experiment pipeline, involving debugging and syntax.

@@ -1,0 +1,24 @@
+\chapter*{Abstract} 
+\addcontentsline{toc}{chapter}{Abstract}
+\pagestyle{plain}
+ 
+Steganalysis has typically relied on hand-crafted statistical means of discovering concealed data, 
+however, in recent years the effort has largely shifted towards automated feature extraction techniques 
+via deep learning. Reliable detection of such hidden content is of direct relevance to law enforcement 
+and cybersecurity practitioners tasked with uncovering covert communication channels in digital forensic 
+investigations. This thesis examines whether the newer Convolutional Neural Networks (CNNs) are more 
+effective than traditional RS-analysis methods to detect Least Significant Bit (LSB) steganography 
+utilized to hide data in lossless PNG image files. To evaluate these two detection methods, 
+a quantitative experiment was performed using BOSSBase 1.01 dataset on 4 different embedding techniques: 
+Sequential LSB, Randomized LSB, Edge-Adapted LSB, and LSB Matching, at three different 
+payload capacities of 25\%, 50\%, and 75\%. The results of this investigation show that 
+traditional RS-analysis or modern CNN methods can be optimal based on what embedding strategy has been used. 
+RS-analysis was superior to CNN (SRNet) for both Sequential and Randomized LSB modifications across 
+all examined payloads, achieving greater than 95\% accuracy for both modified versions even at the 
+lowest embedding rate of 25\%. Conversely, for low payload Edge-Adaptive LSB, CNN demonstrated superior 
+robustness with an accuracy of 79.12\% versus the RS-analysis’s accuracy of 72.50\% at a 25\% payload. 
+Finally, only the CNN was capable of detecting LSB Matching (with an accuracy of 91.36\%), 
+where the RS-analysis performed below chance level with its ability to detect the embedding method. 
+Therefore, these results demonstrate that traditional statistical techniques continue to be very 
+effective and sufficient for the very basic Least Significant Bit substitution; however, deep 
+learning techniques are needed for detecting Edge-Adaptive LSB and/or LSB Matching steganography.
