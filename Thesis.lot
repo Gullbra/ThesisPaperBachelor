@@ -1,9 +1,0 @@
-\babel@toc {english}{}\relax 
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces LSB Methods in this Study}}{11}{table.3.1}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Classification performance of RS analysis for different LSB embedding techniques and rates.}}{16}{table.4.1}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces CNN classification performance for different LSB embedding strategies and rates, evaluated on a balanced held-out test set of 3000 images (1500 cover / 1500 stego) per configuration.}}{20}{table.4.2}%
-\addvspace {10\p@ }

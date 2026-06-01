@@ -77,43 +77,50 @@ This steganalysis method was implemented in Python, adhering to the specificatio
 
 \subsubsection{Convolutional Neural Network (CNN)}
 
-For the ML model, SRNet (Steganalysis Residual Network) \textcite{Boroumand2019} was chosen. 
-This was motivated by its architecture, which aims to extract noise residuals, where the hidden messages might reside, in early layers, before they become suppressed in successive layers \cite{Wang2021}, and its documented performance detecting stego images embedded with advanced steganographic methods \cite{Boroumand2019}.
+For the ML model, SRNet (Steganalysis Residual Network) \cite{Boroumand2019} was chosen. 
+This was motivated by its architecture, which aims to extract noise residuals, where the hidden messages might reside, 
+in early layers, before they become suppressed in successive layers \cite{Wang2021}, 
+and its documented performance detecting stego images embedded with advanced steganographic methods \cite{Boroumand2019}.
 
 \subsubsection*{SRNet Implementation and Training Details}
 To ensure full reproducibility, the specific hyperparameters and training configurations utilized for the SRNet model are detailed below.
 
 \paragraph{Weight Initialization}
-The convolutional layers of the network were initialized using a Xavier uniform distribution, with biases set to a constant value of $0.2$. The fully connected (Linear) layers were initialized using a Normal distribution ($\mu=0.0, \sigma=0.01$) with biases set to $0.0$.
+The convolutional layers of the network were initialized using a Xavier uniform distribution, with biases set to a constant value of $0.2$. 
+The fully connected (Linear) layers were initialized using a Normal distribution ($\mu=0.0, \sigma=0.01$) with biases set to $0.0$.
 
 \paragraph{Optimizer and Loss Function}
-The network was trained using the Adamax optimizer. The optimizer hyperparameters were configured to $\beta_1 = 0.9$, $\beta_2 = 0.999$, and $\epsilon = 10^{-8}$, with no weight decay applied. The final layer utilizes a LogSoftmax activation, and the model was optimized against a Negative Log-Likelihood Loss (NLLLoss) function.
+The network was trained using the Adamax optimizer. 
+The optimizer hyperparameters were configured to $\beta_1 = 0.9$, $\beta_2 = 0.999$, and $\epsilon = 10^{-8}$, with no weight decay applied. 
+The final layer utilizes a LogSoftmax activation, and the model was optimized against a Negative Log-Likelihood Loss (NLLLoss) function.
 
 \paragraph{Training Pipeline and Augmentation}
-A batch size of $20$ was utilized during training. The initial learning rate was set to $0.001$ and was decayed by a factor of $0.1$ every $30$ epochs. To increase robustness, data augmentation was applied to the training set by randomly rotating the input images by $90^\circ$.
+A batch size of $20$ was utilized during training. 
+The initial learning rate was set to $0.001$ and was decayed by a factor of $0.1$ every $30$ epochs. 
+To increase robustness, data augmentation was applied to the training set by randomly rotating the input images by $90^\circ$.
 
 \begin{table}[h]
-\centering
-\caption{SRNet training configuration.}
-\label{tab:cnn-hyperparams}
-\begin{tabular}{ll}
-\toprule
-\textbf{Parameter} & \textbf{Value} \\
-\midrule
-Input size              & $512 \times 512$ grayscale \\
-Train / Val / Test      & 7000 / 1500 / 1500\\
-Batch size              & 16 cover--stego pairs (32 images) \\
-Optimizer               & Adamax \\
-Initial learning rate   & $1 \times 10^{-3}$ \\
-LR schedule             & $\times 0.1$ on validation plateau \\
-Loss                    & Binary cross-entropy \\
-Max epochs              & 30\\
-Early stopping          & patience 10, min.\ delta $1 \times 10^{-4}$ \\
-Augmentation            & 90$^\circ$ rotations, horizontal/vertical flips \\
-Random seed             & 42 \\
-Framework               & PyTorch 2.x\\
-\bottomrule
-\end{tabular}
+  \centering
+  \caption{SRNet training configuration.}
+  \label{tab:cnn-hyperparams}
+  \begin{tabular}{ll}
+    \toprule
+    \textbf{Parameter} & \textbf{Value} \\
+    \midrule
+    Input size              & $512 \times 512$ grayscale \\
+    Train / Val / Test      & 7000 / 1500 / 1500\\
+    Batch size              & 16 cover--stego pairs (32 images) \\
+    Optimizer               & Adamax \\
+    Initial learning rate   & $1 \times 10^{-3}$ \\
+    LR schedule             & $\times 0.1$ on validation plateau \\
+    Loss                    & Binary cross-entropy \\
+    Max epochs              & 30\\
+    Early stopping          & patience 10, min.\ delta $1 \times 10^{-4}$ \\
+    Augmentation            & 90$^\circ$ rotations, horizontal/vertical flips \\
+    Random seed             & 42 \\
+    Framework               & PyTorch 2.x\\
+    \bottomrule
+  \end{tabular}
 \end{table}
 
 \subsection{Performance Metrics}
