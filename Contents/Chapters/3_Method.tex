@@ -90,7 +90,7 @@ The convolutional layers of the network were initialized using a Xavier uniform 
 The fully connected (Linear) layers were initialized using a Normal distribution ($\mu=0.0, \sigma=0.01$) with biases set to $0.0$.
 
 \paragraph{Optimizer and Loss Function}
-The network was trained using the Adamax optimizer. 
+The network was trained using the Adamax optimizer \cite{Kingma2014}, since \textcite{Boroumand2019} found it relieble with a fast convergence relative to other alternatives. 
 The optimizer hyperparameters were configured to $\beta_1 = 0.9$, $\beta_2 = 0.999$, and $\epsilon = 10^{-8}$, with no weight decay applied. 
 The final layer utilizes a LogSoftmax activation, and the model was optimized against a Negative Log-Likelihood Loss (NLLLoss) function.
 
@@ -107,18 +107,15 @@ To increase robustness, data augmentation was applied to the training set by ran
     \toprule
     \textbf{Parameter} & \textbf{Value} \\
     \midrule
-    Input size              & $512 \times 512$ grayscale \\
-    Train / Val / Test      & 7000 / 1500 / 1500\\
-    Batch size              & 16 cover--stego pairs (32 images) \\
+    Input size              & $256 \times 256$ grayscale \\
+    Train / Val             & 7000 / 1500 / 1500 \\
+    Batch size              & 20 \\
     Optimizer               & Adamax \\
     Initial learning rate   & $1 \times 10^{-3}$ \\
-    LR schedule             & $\times 0.1$ on validation plateau \\
-    Loss                    & Binary cross-entropy \\
-    Max epochs              & 30\\
-    Early stopping          & patience 10, min.\ delta $1 \times 10^{-4}$ \\
-    Augmentation            & 90$^\circ$ rotations, horizontal/vertical flips \\
-    Random seed             & 42 \\
-    Framework               & PyTorch 2.x\\
+    LR schedule             & $\times 0.1$ every 30 epochs \\
+    Loss                    & NLLLoss (LogSoftmax output) \\
+    Augmentation            & Random rotation up to $90^\circ$ \\
+    Framework               & PyTorch 2.x \\
     \bottomrule
   \end{tabular}
 \end{table}
