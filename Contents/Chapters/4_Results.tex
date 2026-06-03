@@ -4,9 +4,9 @@ RS estimates were computed for both clean and stego images across three embeddin
 For clean images, the mean RS estimated embedding rate was 0.0211 (actual rate was zero) with a standard deviation of $0.0842$. 
 
 A binary classifier was constructed by thresholding the RS estimate at a value $\tau$. 
-An image whose estimated embedding rate met or exceeded $\tau$ was classified as stego; otherwise it was classified as cover. 
+An image whose estimated embedding rate met or exceeded $\tau$ was classified as stego; otherwise, it was classified as cover. 
 This yields four outcomes: a stego image correctly classified as stego is a True Positive (TP), while one falling below $\tau$ is a False Negative (FN). A cover image correctly classified as cover is a True Negative (TN), while one meeting or exceeding $\tau$ is a False Positive (FP). 
-The threshold $\tau$ was selected to be the embedding rate for each of the three: 0.25, 0.50 and 0.75.
+The threshold $\tau$ was set to match the respective embedding rate tested (0.25, 0.50, or 0.75).
 
 \begin{table}[ht]
   \centering
@@ -17,78 +17,81 @@ The threshold $\tau$ was selected to be the embedding rate for each of the three
     \toprule
     Strategy & Rate & AUC & Accuracy & Threshold $\tau$ & TP & TN & FP & FN \\
     \midrule
-    Sequential & 0.25 & 0.982 & 95.4\% & 0.25& 1441 & 1420 & 80 & 59 \\ % [cite: 30]
-              & 0.50 & 0.998 & 98.6\% & 0.50& 1482 & 1477 & 23 & 18 \\ % [cite: 31]
-              & 0.75 & 0.999 & 99.8\% & 0.75& 1497 & 1496 & 4 & 3 \\ % [cite: 32]
+    Sequential & 0.25 & 0.982 & 95.4\% & 0.25& 1441 & 1420 & 80 & 59 \\ 
+               & 0.50 & 0.998 & 98.6\% & 0.50& 1482 & 1477 & 23 & 18 \\ 
+               & 0.75 & 0.999 & 99.8\% & 0.75& 1497 & 1496 & 4 & 3 \\ 
     \midrule
-    Random     & 0.25 & 0.986 & 97.0\% & 0.25& 1469 & 1440 & 60 & 31 \\ % [cite: 48]
-              & 0.50 & 0.999 & 99.5\% & 0.50& 1497 & 1487 & 13 & 3 \\  % [cite: 49]
-              & 0.75 & 0.999 & 99.9\% & 0.75& 1499 & 1498 & 2 & 1 \\  % [cite: 49]
+    Random     & 0.25 & 0.986 & 97.0\% & 0.25& 1469 & 1440 & 60 & 31 \\ 
+               & 0.50 & 0.999 & 99.5\% & 0.50& 1497 & 1487 & 13 & 3 \\  
+               & 0.75 & 0.999 & 99.9\% & 0.75& 1499 & 1498 & 2 & 1 \\  
     \midrule
-    Adaptive   & 0.25 & 0.761 & 72.5\% & 0.25& 1095 & 1081 & 419 & 405 \\ % [cite: 80]
-              & 0.50 & 0.954 & 90.2\% & 0.50& 1385 & 1321 & 179 & 115 \\ % [cite: 81]
-              & 0.75 & 0.997 & 98.1\% & 0.75& 1487 & 1456 & 44 & 13 \\  % [cite: 82]
+    Adaptive   & 0.25 & 0.761 & 72.5\% & 0.25& 1095 & 1081 & 419 & 405 \\ 
+               & 0.50 & 0.954 & 90.2\% & 0.50& 1385 & 1321 & 179 & 115 \\ 
+               & 0.75 & 0.997 & 98.1\% & 0.75& 1487 & 1456 & 44 & 13 \\  
     \midrule
-    Matching   & 0.25 & 0.516 & 53.3\% & 0.25& 493 & 1106 & 394 & 1007 \\ % [cite: 99]
-              & 0.50 & 0.504 & 51.9\% & 0.50& 448 & 1108 & 392 & 1052 \\ % [cite: 100]
-              & 0.75 & 0.514 & 53.6\% & 0.75& 498 & 1110 & 390 & 1002 \\ % [cite: 100]
+    Matching   & 0.25 & 0.516 & 53.3\% & 0.25& 493 & 1106 & 394 & 1007 \\ 
+               & 0.50 & 0.504 & 51.9\% & 0.50& 448 & 1108 & 392 & 1052 \\ 
+               & 0.75 & 0.514 & 53.6\% & 0.75& 498 & 1110 & 390 & 1002 \\ 
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{ROC \& AUC}
-In both steganalysis algorithms described above, we obtain a score per image reflecting its likelihood of carrying concealed data. 
-To turn this score into a binary decision, we have to choose a threshold. An image with a score above the threshold is considered stego; otherwise, it is classified as clean. 
+For both steganalysis algorithms described above, we obtain a score per image reflecting its likelihood of carrying concealed data. 
+To turn this score into a binary decision, we must choose a threshold. An image with a score above the threshold is considered stego; otherwise, it is classified as clean. 
 Setting the threshold is a balancing act: a lower threshold increases true positives (TP) at the expense of false positives (FP), while a higher threshold increases true negatives (TN) at the expense of false negatives (FN).
 
-The ROC plot maps out this balance. For each threshold, it displays the ratio of TP to the sum of TP and FN (True Positive Rate, TPR) along the vertical axis and FP to TN+FP (False Positive Rate, FPR) on the horizontal axis. 
+The ROC plot maps out this balance. For each threshold, it displays the ratio of TP to the sum of TP and FN (True Positive Rate, TPR) along the vertical axis, and FP to TN+FP (False Positive Rate, FPR) on the horizontal axis. 
 A classifier with a perfect hit rate will pass exactly through the upper-left corner of the plot at (0,1). 
 A classifier making random decisions will yield a 45-degree line. The Area Under Curve (AUC) summarizes the information in an ROC plot in a single numerical measure between zero and one. 
 AUC corresponds to the probability that the classifier will assign a higher score to a randomly chosen stego image than to a randomly chosen clean image. 
-Thus, an AUC of 1.0 implies that the two classes have no overlap, while 0.5 would mean that the classifier makes random decisions. Since AUC does not rely on a specific threshold, it permits direct comparison between classifiers with scores of different units, like the RS estimate and CNN probabilities used in our experiment.
+Thus, an AUC of 1.0 implies that the two classes have no overlap, while 0.5 would mean that the classifier makes random decisions. Since AUC does not rely on a specific threshold, it permits direct comparison between classifiers with scores of different units, such as the RS estimates and CNN probabilities used in our experiment.
 
 For the Sequential and Random strategies, detection performance is high across all three embedding rates, with AUC values exceeding 0.98 in every case. 
-At an embedding rate of r = 0.75, both strategies yield near-perfect accuracy (99.8\% and 99.9\%, respectively). 
-Even at the lowest rate of r = 0.25, the RS analysis achieves AUC values of 0.982 (Sequential) and 0.986 (Random), with accuracies above 95\%. 
+At an embedding rate of $r = 0.75$, both strategies yield near-perfect accuracy (99.8\% and 99.9\%, respectively). 
+Even at the lowest rate of $r = 0.25$, RS analysis achieves AUC values of 0.982 (Sequential) and 0.986 (Random), with accuracies above 95\%. 
+
 The Edge Adaptive strategy proves considerably more difficult to detect. 
-At r = 0.25, the AUC drops to 0.761 and accuracy falls to 72.5\%, with 419 false positives and 405 false negatives out of the tested pairs. 
-Performance improves substantially at higher rates, reaching an AUC of 0.997 and accuracy of 98.1\% at r = 0.75. 
+At $r = 0.25$, the AUC drops to 0.761 and accuracy falls to 72.5\%, with 419 false positives and 405 false negatives out of the tested pairs. 
+Performance improves substantially at higher rates, reaching an AUC of 0.997 and accuracy of 98.1\% at $r = 0.75$. 
+
 The Matching LSB strategy is effectively undetectable by RS analysis. 
-AUC values remain near 0.5 across all embedding rates (0.516, 0.504, and 0.514 for r = 0.25, 0.50, and 0.75, respectively), indicating performance no better than random guessing. 
+AUC values remain near 0.5 across all embedding rates (0.516, 0.504, and 0.514 for $r = 0.25$, $0.50$, and $0.75$, respectively), indicating performance no better than random guessing. 
 The mean RS estimates for stego images under this strategy (0.038 to 0.044) remain close to the clean image baseline of 0.0211, explaining the classifier's inability to distinguish between the two classes.
 
-
-
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{sequentialROC.png}
-    \caption{RS Analysis: ROC Curves for Sequential LSB embedding at various rates.}
+  \centering
+  \includegraphics[width=0.8\textwidth]{sequentialROC.png}
+  \caption{RS Analysis: ROC Curves for Sequential LSB embedding at various rates.}
+  \label{fig:rs_roc_seq}
 \end{figure}
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{randomROC.png}
-    \caption{RS Analysis: ROC Curves for Randomized LSB embedding at various rates.}
+  \centering
+  \includegraphics[width=0.8\textwidth]{randomROC.png}
+  \caption{RS Analysis: ROC Curves for Randomized LSB embedding at various rates.}
+  \label{fig:rs_roc_rand}
 \end{figure}
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{adaptiveROC.png}
-    \caption{RS Analysis: ROC Curves for Edge Adaptive LSB embedding at various rates.}
+  \centering
+  \includegraphics[width=0.8\textwidth]{adaptiveROC.png}
+  \caption{RS Analysis: ROC Curves for Edge Adaptive LSB embedding at various rates.}
+  \label{fig:rs_roc_adapt}
 \end{figure}
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{matchingROC.png}
-    \caption{RS Analysis: ROC Curves for Matching LSB embedding at various rates.}
+  \centering
+  \includegraphics[width=0.8\textwidth]{matchingROC.png}
+  \caption{RS Analysis: ROC Curves for Matching LSB embedding at various rates.}
+  \label{fig:rs_roc_match}
 \end{figure}
 
 \clearpage
 
-The corresponding ROC curves are shown in Figures 4.1–4.4. 
-Figures 4.1 and 4.2 illustrate the strong separability achieved for Sequential and Random embedding, with curves closely hugging the upper-left corner. 
-Figure 4.3 shows the progressive improvement for the Edge Adaptive strategy as the embedding rate increases. Figure 4.4 confirms that the Matching LSB strategy produces ROC curves indistinguishable from the diagonal, consistent with random guessing.
-
+The corresponding ROC curves are shown in Figures \ref{fig:rs_roc_seq}--\ref{fig:rs_roc_match}. 
+Figures \ref{fig:rs_roc_seq} and \ref{fig:rs_roc_rand} illustrate the strong separability achieved for Sequential and Random embedding, with curves closely hugging the upper-left corner. 
+Figure \ref{fig:rs_roc_adapt} shows the progressive improvement for the Edge Adaptive strategy as the embedding rate increases. Figure \ref{fig:rs_roc_match} confirms that the Matching LSB strategy produces ROC curves indistinguishable from the diagonal, consistent with random guessing.
 
 \begin{table}[ht]
   \centering
@@ -100,66 +103,71 @@ Figure 4.3 shows the progressive improvement for the Edge Adaptive strategy as t
     Strategy & Rate & AUC & Accuracy & TP & TN & FP & FN \\
     \midrule
     Sequential LSB& 0.25 & 0.960 & 89.47\% & 1340 & 1344 & 156 & 160 \\
-              & 0.50 & 0.994 & 96.83\% & 1453 & 1452 & 48  & 47  \\
-              & 0.75 & 0.999 & 99.20\% & 1488 & 1488 & 12  & 12  \\
+                  & 0.50 & 0.994 & 96.83\% & 1453 & 1452 & 48  & 47  \\
+                  & 0.75 & 0.999 & 99.21\% & 1488 & 1488 & 12  & 12  \\
     \midrule
-    Random LSB& 0.25 & 0.905 & 82.37\% & 1237 & 1234 & 266 & 263 \\
-              & 0.50 & 0.978 & 93.17\% & 1402 & 1393 & 107 & 98  \\
-              & 0.75 & 0.996 & 97.63\% & 1468 & 1461 & 39  & 32  \\
+    Random LSB    & 0.25 & 0.905 & 82.35\% & 1237 & 1234 & 266 & 263 \\
+                  & 0.50 & 0.978 & 93.18\% & 1402 & 1393 & 107 & 98  \\
+                  & 0.75 & 0.996 & 97.64\% & 1468 & 1461 & 39  & 32  \\
     \midrule
-    Adaptive LSB& 0.25 & 0.876 & 79.13\% & 1195 & 1179 & 321 & 305 \\
-              & 0.50 & 0.952 & 88.40\% & 1335 & 1317 & 183 & 165 \\
-              & 0.75 & 0.984 & 94.73\% & 1427 & 1415 & 85  & 73  \\
+    Adaptive LSB  & 0.25 & 0.876 & 79.12\% & 1195 & 1179 & 321 & 305 \\
+                  & 0.50 & 0.952 & 88.41\% & 1335 & 1317 & 183 & 165 \\
+                  & 0.75 & 0.984 & 94.73\% & 1427 & 1415 & 85  & 73  \\
     \midrule
-    Matching LSB& 0.25 & 0.752 & 68.60\% & 1042 & 1016 & 484 & 458 \\
-              & 0.50 & 0.898 & 82.07\% & 1245 & 1217 & 283 & 255 \\
-              & 0.75 & 0.970 & 91.37\% & 1380 & 1361 & 139 & 120 \\
+    Matching LSB  & 0.25 & 0.752 & 68.59\% & 1042 & 1016 & 484 & 458 \\
+                  & 0.50 & 0.898 & 82.07\% & 1245 & 1217 & 283 & 255 \\
+                  & 0.75 & 0.970 & 91.36\% & 1380 & 1361 & 139 & 120 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{sequentialCNN.png}
-    \caption{CNN: ROC Curves for Sequential LSB embedding at various rates.}
+  \centering
+  \includegraphics[width=0.8\textwidth]{sequentialCNN.png}
+  \caption{CNN: ROC Curves for Sequential LSB embedding at various rates.}
+  \label{fig:cnn_roc_seq}
 \end{figure}
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{randomCNN.png}
-    \caption{CNN: ROC Curves for Randomized LSB embedding at various rates.}
+  \centering
+  \includegraphics[width=0.8\textwidth]{randomCNN.png}
+  \caption{CNN: ROC Curves for Randomized LSB embedding at various rates.}
+  \label{fig:cnn_roc_rand}
 \end{figure}
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{adaptiveCNN.png}
-    \caption{CNN: ROC Curves for Edge Adaptive LSB embedding at various rates.}
+  \centering
+  \includegraphics[width=0.8\textwidth]{adaptiveCNN.png}
+  \caption{CNN: ROC Curves for Edge Adaptive LSB embedding at various rates.}
+  \label{fig:cnn_roc_adapt}
 \end{figure}
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{matchingCNN.png}
-    \caption{CNN: ROC Curves for Matching LSB embedding at various rates.}
+  \centering
+  \includegraphics[width=0.8\textwidth]{matchingCNN.png}
+  \caption{CNN: ROC Curves for Matching LSB embedding at various rates.}
+  \label{fig:cnn_roc_match}
 \end{figure}
 
 \clearpage
 
-Accuracy for detection for the trained CNN algorithm is shown in Table 4.2. 
-It is evident from the table that there is a definite hierarchy of detectability: the LSB Sequential method is detected easily, while the Random LSB and Edge Adaptive LSB methods are detected moderately well, with the Matching LSB being the most difficult to detect.
+Accuracy for detection by the trained CNN algorithm is shown in Table \ref{tab:cnn-results}. 
+It is evident from the table that there is a definite hierarchy of detectability: the Sequential LSB method is detected easily, while the Random LSB and Edge Adaptive LSB methods are detected moderately well, with Matching LSB being the most difficult to detect.
 
-In the case of LSB Sequential Embedding, the CNN obtains 89.47\% accuracy at the smallest embedding rate $r = 0.25$, with an increase up to 96.83\% at $r = 0.50$, and 99.21\% at $r = 0.75$. 
-This high performance should not come as a surprise, since sequential embedding focuses on changes within one block of pixels, resulting in spatially correlated errors.
+In the case of Sequential LSB embedding, the CNN obtains 89.47\% accuracy at the smallest embedding rate of $r = 0.25$, with an increase to 96.83\% at $r = 0.50$, and 99.21\% at $r = 0.75$. 
+This high performance should not come as a surprise, since sequential embedding focuses on changes within contiguous blocks of pixels, resulting in highly structured and spatially correlated errors.
 
-Detecting the LSB random embedding is a little harder, with an average drop in the accuracy of about 7 percentage points compared to the case of the sequential algorithm for $r = 0.25$, where the accuracy falls down to 82.35\%. For larger values of the distortion parameter, this difference becomes smaller, as we have 93.18\% for $r = 0.50$ and 97.64\% for $r = 0.75$.
+Detecting Random LSB embedding is slightly harder, with an average drop in accuracy of about 7 percentage points compared to the sequential algorithm for $r = 0.25$, where the accuracy falls to 82.35\%. For larger values of the distortion parameter, this difference becomes smaller, reaching 93.18\% for $r = 0.50$ and 97.64\% for $r = 0.75$.
 
-Edge Adaptive embedding technique makes detection even more difficult. 
-With $r = 0.25$, the precision drops to 79.12\%, which is a decrease by more than 13 percentage points from LSB sequential with the same ratio. 
-The precision increases to 88.41\% and 94.73\% for $r = 0.50$ and $r = 0.75$, correspondingly. 
-With Edge adaptive embedding, since most alterations are applied to texture-rich areas, where natural variations take place, it becomes more difficult to tell the alterations from the original variation in the picture.
+The Edge Adaptive embedding technique makes detection even more difficult. 
+With $r = 0.25$, the accuracy drops to 79.12\%, representing a decrease of more than 10 percentage points from Sequential LSB at the same ratio. 
+The accuracy increases to 88.41\% and 94.73\% for $r = 0.50$ and $r = 0.75$, respectively. 
+With Edge Adaptive embedding, because most alterations are applied to texture-rich areas where natural variations occur, it becomes significantly more difficult for the model to distinguish artificial alterations from the original variance in the image.
 
-The problem of Matching LSB presents itself as the hardest for the CNN to solve. 
-The CNN achieves an accuracy rate of 68.59\% when $r = 0.25$. This accuracy rate is quite high, considering that it is significantly better than the chance accuracy rate of 50\%. 
-The highest accuracy rates attained when $r = 0.50$ and $r = 0.75$ were 82.07\% and 91.36\% respectively. LSB Matching presents its greatest challenge to the CNN because of the basic premise that distinguishes it from other schemes; LSB replacement to LSB Matching adjustment of pixels.
+Matching LSB proved to be the most challenging method for the CNN to detect. 
+The CNN achieves an accuracy rate of 68.59\% when $r = 0.25$. This accuracy rate remains notable, considering it is still significantly better than the chance accuracy rate of 50\%. 
+The highest accuracy rates attained when $r = 0.50$ and $r = 0.75$ were 82.07\% and 91.36\%, respectively. 
+LSB Matching presents the greatest challenge to the CNN because of the basic premise that distinguishes it from other schemes: it adjusts pixel values by randomly adding or subtracting 1 rather than strictly replacing the LSB.
 
-For all four methods, there is an observable trend: accuracy improves linearly with embedding rate, with the biggest gains observed from $r = 0.25$ to $r = 0.50$ (a gain of 7-14\%), whereas the gain between $r = 0.50$ to $r = 0.75$ is smaller (3-9\%). 
-This diminishing effect can be attributed to the logarithmic dependence of the amount of data on the ability to recognize it statistically; when doubling the amount of data starting from a very low value provides much more evidence than when doubling from a large amount of data.
+For all four methods, an observable trend exists: accuracy improves alongside the embedding rate, with the most substantial gains observed from $r = 0.25$ to $r = 0.50$ (a gain of 7--14 percentage points), whereas the gain between $r = 0.50$ and $r = 0.75$ is smaller (3--9 percentage points). 
+This diminishing return can be attributed to the non-linear relationship between the embedding rate and the statistical visibility of the artifacts; doubling the amount of hidden data starting from a very low value provides exponentially more evidence to the model than doubling it from an already saturated state.

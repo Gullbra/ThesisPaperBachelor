@@ -9,14 +9,15 @@ In this study, the steganographic embedding method and the payload size were use
 \section{Ethical Considerations}
 This study relies entirely on the processing of pre-existing digital data and does not involve human participants. 
 Thus, the ethical concerns regarding informed consent, anonymity, and voluntary participation are not applicable \cite{Denscombe2014}. 
-The BOSSBase 1.01 dataset \cite{Sedighi2016} is a standard academic image library recognized in forensics research. 
+The BOSSBase 1.01 dataset \cite{bas2011break} is a standard academic image library recognized in forensics research. 
 No personal or sensitive data was collected or generated during the experimental process.
 
 The key ethical consideration of this study relates to the “dual-use” of steganography and steganalysis. 
-Steganography can be applied for ethical purposes like protecting privacy and copyrights, it can also be used for malicious purposes like data exfiltration attacks and command and control communication in cyber-attacks. Studying steganalysis, or techniques for detecting steganographic communications, is a positive contribution as it helps forensic specialists in detecting hidden communication channels. 
-Instead of using the research for developing new embedding algorithms that are difficult to be detected, this study sticks to the detection of LSB steganography, which is an example of good security research ethics. 
+While steganography can be applied for ethical purposes like protecting privacy and copyrights; it can also be used for malicious purposes like data exfiltration attacks and command and control communication in cyber-attacks. 
+Studying steganalysis, or techniques for detecting steganographic communications, is a positive contribution as it helps forensic specialists in detecting hidden communication channels. 
+Instead of using the research for developing new embedding algorithms that are difficult to be detected, this study strictly focuses on the detection of LSB steganography, which is an example of good security research ethics. 
 
-To ensure scientific integrity, this study takes a the importance of replicability into consideration. 
+To ensure scientific integrity, this study takes the importance of replicability into consideration. 
 Using a public data set with standard evaluation criteria (True Positive Rate, True Negative Rate, False Positive Rate, False Negative Rate, Accuracy) helps ensure that the comparison between the CNN and RS-Analysis is sound, so that the capability of the deep learning approach is not misrepresented for security applications.
 
 Further ethical implications of this study are discussed in section 5.
@@ -26,10 +27,10 @@ Further ethical implications of this study are discussed in section 5.
 The conduct of the experiment can be examined as a four-step process.
 
 \begin{enumerate}
-    \item Cover Image Selection and Preparation.
-    \item Stego-Image Embedding.
-    \item Implementation of Steganalysis
-    \item Performance Evaluation.
+  \item Cover Image Selection and Preparation.
+  \item Stego-Image Embedding.
+  \item Implementation of Steganalysis
+  \item Performance Evaluation.
 \end{enumerate}
 
 
@@ -44,29 +45,30 @@ This conversion maintained the lossless nature of the images while providing a c
 \subsection{Stego-Image Generation}
 \subsubsection{Payload Sizes (Embedding Ratios)}
 
-For the size of the embedding message 25\% ($r=0.25$), 50\% ($r=0.50$), and 75\% ($r=0.75$) of the embedding capacity was chosen. 
+For the size of the embedding message 25\% ($r=0.25$), 50\% ($r=0.50$), and 75\% ($r=0.75$) of the embedding capacity were chosen. 
 
 \subsubsection{LSB Methods}
 Four different LSB-based steganographic methods of varying sophistication were selected for comparative testing. 
 This was done with the goal of increasing the generalizability of the assessment. 
-These were implemented in Python scripts from the theoretical sources listed in Table 3.1.
+These were implemented in Python scripts from the theoretical sources listed in Table \ref{tab:lsb_methods}.
 
 \begin {table} [h]
-    \centering
-    \begin{tabular}{l p{5cm} p{3cm}} % defines number of columns and their layout 
-        \toprule[1.5pt]
-        \textsc{Method} & \textsc{Description} & \textsc{Sources}\\
-        \midrule
-        \verb|Sequential LSB| & LSB embedding in its simplest form.  & \textcite{Chan2004}\\
-        \midrule[0.5pt]
-        \verb|Randomized LSB| & Use of PRNG for selecting embedding locations. & \textcite{Sharp2001} \\
-        \midrule[0.5pt]
-        \texttt{LSB Matching ($\pm$1)} & Randomly adds or subtracts 1 from the pixel value instead of replacing it. & \textcite{Ker2005}\\
-        \midrule[0.5pt]
-        \verb|Edge Adaptive LSB| & Identifies "noisy" pixels for embedding. & \textcite{Luo2010}\\
-        \bottomrule[1.5pt]
-    \end{tabular}
-    \caption {LSB Methods in this Study} \label{tab:titles2}
+  \centering
+  \begin{tabular}{l p{5cm} p{3cm}} % defines number of columns and their layout 
+    \toprule[1.5pt]
+    \textsc{Method} & \textsc{Description} & \textsc{Sources}\\
+    \midrule
+    \verb|Sequential LSB| & LSB embedding in its simplest form.  & \cite{Chan2004}\\
+    \midrule[0.5pt]
+    \verb|Randomized LSB| & Use of PRNG for selecting embedding locations. & \cite{Sharp2001} \\
+    \midrule[0.5pt]
+    \texttt{LSB Matching ($\pm$1)} & Randomly adds or subtracts 1 from the pixel value instead of replacing it. & \cite{Ker2005}\\
+    \midrule[0.5pt]
+    \verb|Sobel Edge Adaptive LSB| & Identifies "noisy" pixels for embedding. & \cite{Luo2010, smitha2018sobel}\\
+    \bottomrule[1.5pt]
+  \end{tabular}
+  \caption {LSB Methods in this Study}
+  \label{tab:lsb_methods}
 \end{table}
 
 
@@ -90,7 +92,7 @@ The convolutional layers of the network were initialized using a Xavier uniform 
 The fully connected (Linear) layers were initialized using a Normal distribution ($\mu=0.0, \sigma=0.01$) with biases set to $0.0$.
 
 \paragraph{Optimizer and Loss Function}
-The network was trained using the Adamax optimizer \cite{Kingma2014}, since \textcite{Boroumand2019} found it relieble with a fast convergence relative to other alternatives. 
+The network was trained using the Adamax optimizer \cite{Kingma2014}, since \textcite{Boroumand2019} found it reliable with a fast convergence relative to other alternatives. 
 The optimizer hyperparameters were configured to $\beta_1 = 0.9$, $\beta_2 = 0.999$, and $\epsilon = 10^{-8}$, with no weight decay applied. 
 The final layer utilizes a LogSoftmax activation, and the model was optimized against a Negative Log-Likelihood Loss (NLLLoss) function.
 
@@ -108,7 +110,7 @@ To increase robustness, data augmentation was applied to the training set by ran
     \textbf{Parameter} & \textbf{Value} \\
     \midrule
     Input size              & $256 \times 256$ grayscale \\
-    Train / Val             & 7000 / 1500 / 1500 \\
+    Train / Val / Test      & 7000 / 1500 / 1500 \\
     Batch size              & 20 \\
     Optimizer               & Adamax \\
     Initial learning rate   & $1 \times 10^{-3}$ \\
@@ -125,6 +127,19 @@ To increase robustness, data augmentation was applied to the training set by ran
 The results of the experiment were compiled into two tables with several relevant metrics, grouped by embedding technique.
 
 
+\section{Data and Code Availability}
+To ensure full transparency and to facilitate the reproducibility of the experimental pipeline, all custom scripts, model architectures, 
+and data processing pipelines developed for this thesis have been made publicly available. 
+
+The primary repository containing the overall experimental pipeline and the steganographic embedding methods can be 
+found in the main project repository \cite{GullbrandssonPakos2026project}. 
+The implementations of the steganalysis methods, SRNet \cite{GullbrandssonPakos2026srnet} and RS-analysis \cite{GullbrandssonPakos2026rs}, utilized pre-existing implementations as a base, which were forked and modified to fit this 
+experiment. These are available as subrepositories within the main project repository and can be accessed independently. The creators of the original repositories are properly attributed within the respective forks.
+
+Readers and researchers are encouraged to consult these repositories for exact code-level details regarding the hyperparameters, 
+preprocessing steps, and evaluation loops utilized in this study.
+
+
 \section{Alternative Research Strategies and Methods}
 \subsection{Choice of Dataset}
 \textcite{Sedighi2016} concludes that the choice of cover images has a huge impact on the effectiveness of different steganographic and steganalysis methods. 
@@ -133,15 +148,20 @@ Evaluating effectiveness of these methods on the same cover image source might t
 Another approach would be to focus the study on certain fixed scenarios where cover source and steganographic method are predefined to be the presumed optimal for each other, and then compare different steganalysis methods.
 
 \subsection{Other Steganographic Methods}
-This study does not include more modern steganographic methods like WOW, HUGO, MiPOD, or SUniward. This was done to limit the study, but decreases its usability in a modern context.
+This study does not include more modern steganographic methods like WOW, HUGO, MiPOD, or S-UNIWARD. This was done to limit the study, but decreases its usability in a modern context.
 Another approach could include or focus solely on one or more of these methods. 
 
 \subsection{Design Science Research}
 One possible alternative approach that might have been adopted is Design Science Research (DSR), which has been formally introduced by \textcite{ChatterjeeHevner2010}. 
-In DSR, the focus is on developing and assessing a new artifact, such as a new detection algorithm, an improved CNN framework, or an integrated detection scheme based on statistics and deep learning, with the designed artifact being the key research contribution. In this process, knowledge creation occurs by repeated building and testing, followed by communicating design knowledge as the research outcome.
+In DSR, the focus is on developing and assessing a new artifact, such as a new detection algorithm, an improved CNN framework, 
+or an integrated detection scheme based on statistics and deep learning, with the designed artifact being the key research contribution. 
+In this process, knowledge creation occurs by repeated building and testing, followed by communicating design knowledge as the research outcome.
 DSR was taken into consideration but eventually rejected as the main method for use in the current thesis. 
 This is due to the nature of the research question asked, which is comparative in its approach rather than constructive.
 
 \subsection{The Use of AI tools}
-To meet the requirements of academic integrity, the authors wish to acknowledge that AI tools were used in the process of writing this thesis in a supporting role. 
-In particular, AI programs were used for: verifying the spelling and grammar in sentences, proposing rewrites aimed at enhancing the readability of sentences written by the authors, helping find and pinpoint source literature, which was then reviewed, validated, and referenced by the authors directly, and giving support in coding the experiment pipeline, involving debugging and syntax.
+To meet the requirements of academic integrity, the authors wish to acknowledge that AI tools were used in the process of writing this thesis in a 
+supporting role. 
+In particular, AI programs were used for: verifying the spelling and grammar in sentences, proposing rewrites aimed at 
+enhancing the readability of sentences written by the authors, helping find and pinpoint source literature, which was then reviewed, 
+validated, and referenced by the authors directly, and giving support in coding the experiment pipeline, involving debugging and syntax.
