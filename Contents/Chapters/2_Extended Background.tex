@@ -5,18 +5,21 @@
 \subsection{Fundamentals of LSB Steganography}
 LSB embedding stands out as one of the most popular and accessible steganographic techniques. 
 LSB steganography replaces the value of a least significant bit of a pixel with the bit from the hidden message, as described by \textcite{Chan2004}. 
-For instance, in an 8-bit grayscale image, modifying the least significant bit of a pixel value from 10110110 (182) to 10110111 (183) results in only one change in intensity level (see figure 2.1), which is essentially undetectable by the human eye. 
-The advantage of LSB insertion lies in its simplicity and high embedding capacity; however, these advantages also exhibit statistical abnormalities that can be utilized in the detection process.
+For instance, in an 8-bit grayscale image, modifying the least significant bit of a pixel value from 10110110 (182) to 10110111 (183) results in a change of only one intensity level (see Figure \ref{fig:lsb_illustration}), 
+which is essentially undetectable by the human eye. 
+The advantage of LSB insertion lies in its simplicity and high embedding capacity; 
+however, this embedding process also introduces statistical abnormalities that can be utilized in the detection process.
+
 The image format used to contain the hidden information plays a vital role in both the effectiveness of the steganographic embedding and its detectability. 
 While not the only lossless format, PNG (Portable Network Graphics) images are highly relevant to LSB steganography given their characteristics as a lossless compressible file format. 
 While JPEG is a useful format, it is lossy and often destroys hidden data when compression artifacts are introduced \cite{Elgabar2013}. 
 PNG images and their deflate compression algorithm preserve pixel values exactly, thus maintaining an ideal medium for LSB steganography because the image maintains the exact bit values required for message recovery.
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{lsb_illustration.png}
-    \caption{LSB Illustration.}
-    \label{fig:roc_matching}
+  \centering
+  \includegraphics[width=0.8\textwidth]{lsb_illustration.png}
+  \caption{LSB Illustration.}
+  \label{fig:lsb_illustration}
 \end{figure}
 
 
@@ -33,15 +36,15 @@ is defined to measure the "noisiness" or variation within each group. As defined
 the discrimination function is calculated as the sum of absolute differences between adjacent pixels:
 
 \begin{equation}
-    f(x_1, x_2, \dots, x_n) = \sum_{i=1}^{n-1} |x_{i+1} - x_i|
+  f(x_1, x_2, \dots, x_n) = \sum_{i=1}^{n-1} |x_{i+1} - x_i|
 \end{equation}
 
 By applying a flipping operation (mask $M$) to the LSBs of the pixels in a group, the block's noisiness changes. Based on how the discrimination function value changes after flipping (denoted as $F_M(G)$), groups are categorized into:
 
 \begin{itemize}
-    \item \textbf{Regular (R):} Flipping increases the noisiness ($f(F_M(G)) > f(G)$).
-    \item \textbf{Singular (S):} Flipping decreases the noisiness ($f(F_M(G)) < f(G)$).
-    \item \textbf{Unusable (U):} Flipping does not change the noisiness ($f(F_M(G)) = f(G)$).
+  \item \textbf{Regular (R):} Flipping increases the noisiness ($f(F_M(G)) > f(G)$).
+  \item \textbf{Singular (S):} Flipping decreases the noisiness ($f(F_M(G)) < f(G)$).
+  \item \textbf{Unusable (U):} Flipping does not change the noisiness ($f(F_M(G)) = f(G)$).
 \end{itemize}
 
 Statistical symmetry is the core premise of RS analysis. 
@@ -54,7 +57,7 @@ number of Regular groups obtained using an inverse mask ($R_{-M}$); the case is 
 
 
 The natural balance is disturbed by LSB embedding, and the disturbance grows as the payload increases. 
-As the size of this modified payload increases, the difference between ($R_M$) and ($S_M$) will become smaller. 
+As the size of this modified payload increases, the difference between $R_M$ and $S_M$ will become smaller. 
 This process continues until the image becomes completely randomized; at that point, $R_M$ and $S_M$ converge. 
 Since RS Analysis measures absolute deviation from this perfect symmetry, 
 it not only allows for detection of steganography but also allows for a 
@@ -83,7 +86,7 @@ The key benefit of using CNNs over traditional statistical methods, such as RS-a
 In traditional methods, feature extraction is completed first, and those features are used to train the classifier independently; with CNNs, both feature extraction and classification occur in concert using backpropagation \cite{Qian2015}.
 
 \subsection{Sensitivity and Robustness}
-Researching payload size raises issues regarding detection sensitivity. 
+Researching varying payload size highlights the challenge of detection sensitivity. 
 RS-Analysis relies on comparing variations within block statistics (based on $R_M$ versus $S_M$). 
 As the payload decreases, the difference becomes negligible. At low payload size (below 0.05 bpp), the modification to pixel groups does not create enough signal to differentiate the image from natural noise. 
 While statistical approaches struggle to create an accurate threshold in these low-payload situations, deep learning models have shown superior performance \cite{Apau2024}.
@@ -91,4 +94,4 @@ While statistical approaches struggle to create an accurate threshold in these l
 Combating the false positive rate is also vital for operational security. 
 A key weakness of statistical tests is the occurrence of false alarms when viewing noisy images or those with distinct textures. 
 Scanned photographs or images altered using specific filters often possess statistical properties that confuse RS steganalysis, incorrectly classifying clean images as stego-images \cite{Fridrich2002}. 
-CNNs typically offer better generalizability. After being trained on large datasets, deep learning models can learn to detect the specific artificial noise introduced by LSB embedding, reducing the false positive rate compared to rigid statistical tests \cite{Qian2015} \cite{Apau2024}. 
+CNNs typically offer better generalizability. After being trained on large datasets, deep learning models can learn to detect the specific artificial noise introduced by LSB embedding, reducing the false positive rate compared to rigid statistical tests \cite{Qian2015, Apau2024}. 

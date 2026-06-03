@@ -3,8 +3,8 @@
 
 In the age of widespread digital communication and increasing concerns about data privacy, 
 the methods of concealing information have become vital in computer and systems sciences research. 
-Steganography, derived from Greek words “covered” and “writing”, is defined as the practice of concealing 
-information inside, often innocent, digital media, such as images, 
+Steganography, derived from the Greek words \textit{steganos} (covered) and \textit{graphein} (writing), 
+is defined as the practice of concealing information inside often-innocent digital media, such as images, 
 for secret communication \cite{Fridrich2002}. While cryptography encrypts information 
 in order to make it unreadable, steganography is concerned with concealing the 
 very existence of the information \cite{Fridrich2002}, making it valuable for 
@@ -19,49 +19,67 @@ Research into steganalysis therefore contributes directly to the work of forensi
 cybersecurity practitioners tasked with uncovering hidden communication channels 
 that would otherwise evade conventional inspection.
 
-The countermeasure to steganography is known as steganalysis. An “arms race” has developed many techniques against steganography. These techniques aim to develop reliable ways to detect the presence of hidden data in digital media. The detection methods fall primarily into two categories. 
+The countermeasure to steganography is steganalysis. 
+An ongoing ``arms race'' has driven the development of numerous techniques aimed at reliably 
+detecting the presence of hidden data in digital media. 
+These detection methods fall primarily into two categories.
 
-The more traditional ones include statistical analysis, such as the Regular-Singular (RS) analysis, 
-which detects the disruptions in spatial correlations and local smoothness that random LSB embedding 
-introduces to the pixel data \cite{Manoharan2008}.
+The first category consists of traditional statistical methods, such as Regular-Singular (RS) analysis, 
+which detects disruptions in the spatial correlations and local smoothness that random LSB embedding 
+introduces to pixel data \cite{Fridrich2001, Manoharan2008}.
 
-The more recent, second category uses machine learning, 
-more specifically deep learning, where models such as Convolutional Neural 
-Networks (CNNs) are trained to detect the fine, 
-high-dimensional patterns and noise artifacts that are present in stego images \cite{Qian2015}. 
+The second, more recent category employs machine learning—specifically deep learning. 
+Models such as Convolutional Neural Networks (CNNs) are trained to detect the fine, 
+high-dimensional patterns and noise artifacts introduced into stego images \cite{Qian2015}.
 
-The advancements in deep learning research have resulted in a paradigm shift for steganalysis research with a tendency to regard Neural Networks as the norm for solving steganalytic detection tasks. However, this paradigm shift may tend to neglect the computational complexities and detection accuracies. Although the use of Convolutional Neural Networks (CNNs) with state-of-the-art performances for complex and adaptive steganographic attacks is compelling, their superiority over traditional methods for basic LSB embedding schemes within lossless images is still worthy of research.
+The advancements in deep learning research have resulted in a paradigm shift for steganalysis research with a 
+tendency to regard Neural Networks as the norm for solving steganalytic detection tasks. 
+However, this shift might neglect computational complexity and the baseline detection accuracies of older methods.
+Although the use of Convolutional Neural Networks (CNNs) with state-of-the-art performances for complex 
+and adaptive steganographic attacks is compelling, their superiority over traditional methods for basic LSB embedding schemes 
+within lossless images is still worthy of research.
 
-This study compares the two approaches, and aims to provide a direct and empirical comparison of their effectiveness.
+This study compares the two approaches, and aims to provide a direct and empirical comparison of their respective effectiveness.
+
 
 \section{Delimitations}
 
 \subsection{Image file format (PNG Only)}
-The study will  focus on Least Significant Bit (LSB) steganography, which requires exact pixel value preservation. Lossy image formats, such as JPEG, destroy LSB information in the compression process and introduce artifacts that interfere with the specific statistical analysis methods being tested.
+The study focuses on Least Significant Bit (LSB) steganography, which requires exact pixel value preservation. 
+Lossy image formats, such as JPEG, destroy LSB information in the compression process and introduce artifacts that interfere with the 
+specific statistical analysis methods being tested. Performing both steganography and steganalysis on such image formats requires significantly higher sophistication,
+and these are outside our scope.
 
 \subsection{Spatial Domain LSB Substitution}
-This research aims to compare the baseline effectiveness of the statistical method (RS-analysis) against the Deep Learning model (CNN). The statistical test is designed to detect spatial anomalies in LSBs. Including other adaptive methods, would require different steganalytic methods, due to how they work, which is outside of the scope of this comparison.
+This research aims to compare the baseline effectiveness of a statistical method (RS-analysis) against a Deep Learning model (CNN) in the spatial domain. 
+While complex, highly adaptive steganographic algorithms (e.g., HUGO \cite{pevny2010using}, S-UNIWARD \cite{holub2014universal}) fall outside the scope of this comparison due to 
+requiring entirely different steganalytic approaches, foundational spatial techniques, such as basic sobel based edge adapted steganography, is included to provide a comprehensive baseline.
 
 \subsection{Dataset and Color Channels}
-The BOSSBase dataset is widely used, ensuring reproducibility \cite{Sedighi2016}. 
-The images are in grayscale, the embedding artifacts are then isolated in luminance values.
+The BOSSBase dataset is widely used in the field of steganalysis research, ensuring reproducibility \cite{bas2011break, Sedighi2016}. 
+The datasets images are in a lossless format (.png), and as the images in the dataset are in grayscale, 
+the embedding artifacts are isolated within the luminance values.
 
 \subsection{Payload Granularity}
-This study opts for discrete payload sizes rather than a continuous spectrum. In order to answer the sub-question regarding changes as payload decreases, the study tests fixed embedding rates (25\%, 50\%, and 75\% of image embedding capacity for respective steganographic method) to provide clear comparative bins for the True Positive Rate and detection accuracy analysis.
+This study opts for discrete payload sizes rather than a continuous spectrum. 
+In order to answer the sub-question regarding changes as payload decreases, 
+the study tests fixed embedding rates (25\%, 50\%, and 75\% of image embedding capacity for respective steganographic method) 
+to provide clear comparative bins for the True Positive Rate and overall detection accuracy analysis.
 
 
 \section{Research Question}
 
-This study is an empirical comparison, intent on investigating the effectiveness of traditional statistical steganalysis versus modern deep learning classification in detecting steganographic embedding. 
+This study is an empirical comparison, intent on investigating the effectiveness of traditional statistical steganalysis versus modern 
+deep learning classification in detecting steganographic embedding. 
 
-This is condensed into the following \textbf{Research Question (RQ)}:
+This objective is condensed into the following \textbf{Research Question (RQ)}:
 
 \begin{itemize}
-    \item[] \textbf{RQ:} How does Convolutional Neural Network (CNN) compare to a RS-Analysis statistical test in accurately and reliably detecting LSB steganography in PNG images?
+  \item[] \textbf{RQ:} How does Convolutional Neural Network (CNN) compare to a RS-Analysis statistical test in accurately and reliably detecting LSB steganography in PNG images?
 \end{itemize}
 
 With the help of the following \textbf{Sub-Question (SQ)}:
 
 \begin{itemize}
-    \item[] \textbf{SQ :} How does the detection accuracy of each method change as the size of the hidden payload decreases?
+  \item[] \textbf{SQ :} How does the detection accuracy of each method change as the size of the hidden payload decreases?
 \end{itemize}

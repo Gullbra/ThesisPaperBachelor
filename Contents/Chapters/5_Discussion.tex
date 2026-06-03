@@ -1,88 +1,134 @@
 \chapter{Discussion} \label{cha:discussion}
 
-\subsection*{5.1 Interpretation of Results}
+\section{Interpretation of Results}
 
-The main research question asked how a Convolutional Neural Network compares to RS analysis in accurately and reliably detecting LSB steganography in PNG images. 
-Taken as a whole, the results do not support a simple narrative "deep learning is better". 
-They both appear to have different strengths and the preferable method depends on which embedding strategy and payload need to be detected.
+The main research question asked how a Convolutional Neural Network compares to RS analysis in accurately and reliably detecting LSB steganography in 
+PNG images. 
+Taken as a whole, the results do not support a simple narrative that "deep learning is better". 
+Both methods demonstrate distinct strengths, and the preferable method heavily depends on the specific embedding strategy and payload size being detected.
 
 For Sequential and Random LSB embedding, the RS analysis performed better at every tested rate. 
-At $r = 0.25$ RS showed $95.4\%$ accuracy on Sequential and $97.0\%$ on Random embedding, while the CNN scored $89.47\%$ on Sequential and $82.35\%$ on Random. 
-The biggest difference between the two steganalysis methods can be seen at low payload embedding (around 15 percentage points in favor of RS), and it decreases at higher rates. 
-These results are aligned with the theory regarding RS analysis, which states that Sequential and Random LSB replacement violate the balance between the number of pixels in $R_M$ and $R_{-M}$ groups, as stated by \textcite{Fridrich2001} for natural images. 
-This shows that RS analysis is a very good detector of the characteristic feature of this kind of image manipulation, and that generic CNN's have no meaningful advantage over it in this case.
+At $r = 0.25$, RS showed 95.4\% accuracy on Sequential and 97.0\% on Random embedding, while the CNN scored 89.47\% on Sequential and 82.37\% on Random. 
+The most significant difference between the two steganalysis methods is observed at low-payload embeddings (an advantage of roughly 15 percentage points 
+in favor of RS), which gradually decreases at higher rates. 
+These results perfectly align with the theoretical foundation of RS analysis, which states that Sequential and Random LSB replacement violate the 
+natural balance between the number of pixels in $R_M$ and $R_{-M}$ groups, as established by \textcite{Fridrich2001}. 
+This demonstrates that RS analysis is a highly optimized detector for the characteristic features of this specific image manipulation, 
+and that generic CNNs offer no meaningful advantage over it in these cases.
 
-The case for Edge Adaptive LSB is very different. 
-Both methods appear to be performing well at $r = 0.75    (RS = 98.1\%, CNN = 94.73\%)$, but at $r = 0.25$ RS accuracy falls to $72.5\% (AUC\,0.761)$ while the CNN retains $79.12\%$. 
-The adaptive techniques restriction of modifications to textured, noisy regions is the assumption violation that weakens RS analysis. 
-The discrimination function already registers high values in those regions, so LSB flips no longer reliably push groups from Regular to Singular or vice versa. The CNN learns directly from data rather than from an explicit smoothness assumption, and appears to be less affected by this.
+The case for Edge Adaptive LSB, however, is very different. 
+Both methods perform well at $r = 0.75$ (RS = 98.1\%, CNN = 94.73\%), but at $r = 0.25$, RS accuracy falls sharply to 72.5\% (AUC 0.761), while the CNN retains a 79.13\% accuracy. 
+The adaptive technique's core mechanism—restricting modifications to textured, noisy regions—is the exact assumption violation that weakens RS analysis. 
+Because the mathematical discrimination function already registers high values in those noisy regions, LSB flips no longer reliably push pixel 
+groups from Regular to Singular, or vice versa. The CNN learns directly from the data distribution rather than relying on an explicit smoothness 
+assumption, making it far less susceptible to this evasion tactic.
 
-The crossover between the two methods on Edge Adaptive LSB embedding thus illustrates the theoretical argument made by \textcite{Qian2015} and by \textcite{Apau2024}, namely that the rigidity of handcrafted statistical features becomes a liability as embedding techniques begin to respect natural image statistics.
+The crossover between the two methods on Edge Adaptive LSB embedding thus illustrates the theoretical argument made by \textcite{Qian2015} 
+and \textcite{Apau2024}: the rigidity of handcrafted statistical features becomes a critical liability as embedding techniques begin to respect 
+and mimic natural image statistics.
 
-The largest difference can be observed by looking at the tests on LSB Matching. 
-The RS analysis is very close to flipping a coin, with AUCs of 0.516, 0.504 and 0.514 it is virtually a random classifier. This is not a surprising outcome, as \textcite{Ker2005} observed the $\pm 1$ adjustment in LSB Matching does not flip bits deterministically but rather disturbs pixel values symmetrically. 
-This does not break the $R_M \approx R_{-M}$ assumption that RS analysis relies on. 
-The CNN accuracy ranged from $68.59\%$ at $r = 0.25$ to $91.36\%$ at $r = 0.75, 68.59\%$ accuracy is not great, however, it is a good bit above a random coin flip and demonstrates that the network can learn on artifacts that RS analysis is not usable for. 
-For the Matching LSB method the comparison demonstrates which method is applicable at all rather than which method performs better.
+The most stark contrast can be observed in the tests on LSB Matching. 
+Here, the RS analysis operates very closely to flipping a coin; with AUCs of 0.516, 0.504, and 0.514, it is virtually a random classifier. 
+This is not a surprising outcome, as \textcite{Ker2005} observed that the $\pm 1$ adjustment in LSB Matching does not flip bits deterministically, 
+but rather disturbs pixel values symmetrically. 
+This process does not break the $R_M \approx R_{-M}$ symmetry assumption that RS analysis inherently relies upon. 
+Conversely, the CNN accuracy ranged from 68.60\% at $r = 0.25$ to 91.37\% at $r = 0.75$. While 68.60\% accuracy is not flawless, 
+it is significantly better than a random guess and demonstrates that the neural network can learn to identify artifacts that render RS analysis entirely blind. 
+For the Matching LSB method, this comparison demonstrates which method is applicable at all, rather than merely which method performs better.
 
-\subsection*{5.2 Sub-Question: Sensitivity to Payload Size}
+\section{Sub-Question: Sensitivity to Payload Size}
 
 Our sub-question asked how detection performance varies as the hidden payload decreases. 
-Degradation in performance can be observed across both methods, but the shape of the degradation differs enough to be informative.
+A degradation in performance can be observed across both methods, but the specific trajectory of that degradation is highly informative.
 
-The degradation of RS analysis appears to be dependent on the embedding technique used to hide the payload. 
-It appears to be performing well for Sequential and Random embedding, as the drop from $r = 0.75$ to $r = 0.25$ is only about four to five percentage points of accuracy. 
-Thus, RS analysis appears to be highly reliant at the lowest tested embedding rates.
+The degradation of RS analysis is heavily dependent on the embedding technique used to hide the payload. 
+It performs exceptionally well for Sequential and Random embedding, as the drop in accuracy from $r = 0.75$ to $r = 0.25$ is only 
+about four to five percentage points. 
+Thus, RS analysis proves to be highly reliable even at the lowest tested embedding rates for these schemes.
 
-In the case of Adaptive embedding, the same decrease in payload results in an even larger drop in performance (from 98.1\% to 72.5\%), while for Matching embedding there is virtually no impact from varying the payload parameter because the detector does not detect anything at all. 
-This corresponds to what we found out in 2.1.4 where the performance of statistical tests decreases due to the fact that the introduced asymmetry is less than the noise level.
+In the case of Adaptive embedding, this same decrease in payload results in a much more severe drop in performance (from 98.1\% to 72.5\%). 
+For Matching embedding, there is virtually no impact from varying the payload parameter, simply because the detector fails to identify the 
+signal at any rate. 
+This directly correlates with our findings discussed in Section 2.1.4, where the performance of statistical tests decreases when the induced 
+asymmetry falls below the natural noise level of the image.
 
-The CNN is also consistent across degradation rates, with an average decrease of 7-14\% from $r = 0.50$ to $r = 0.25$ and a smaller decrease from $r = 0.75$ to $r = 0.50$, but there is no catastrophic failure in any embedding scheme. 
-Even on Matching LSB, where RS fails completely at $r = 0.25$, the CNN maintains some discriminative capacity. 
-This suggests that the claim by \textcite{Apau2024}, that learned representations generalize better to low payload embedding is correct, even if in this study, it is only demonstrated for the two more advanced schemes.
+The CNN is much more consistent across degradation rates, exhibiting an average decrease of 7--14 percentage points from $r = 0.50$ to $r = 0.25$, 
+and a smaller decrease from $r = 0.75$ to $r = 0.50$. Most importantly, there is no catastrophic failure in any embedding scheme. 
+Even on Matching LSB, where RS fails completely at $r = 0.25$, the CNN maintains discriminative capacity. 
+This supports the claim by \textcite{Apau2024} that learned representations generalize better to low-payload embeddings, even if, in this specific study, 
+that advantage is only explicitly demonstrated against the two more advanced schemes.
 
-Overall, the two approaches provide different answers to our sub-question, depending on the embedding scheme. 
-For Sequential and Random LSB, both approaches can be trusted to work down to $r = 0.25$, but RS is slightly more accurate. 
+Overall, the two approaches provide different answers to our sub-question depending on the embedding scheme. 
+For Sequential and Random LSB, both approaches can be trusted to work down to $r = 0.25$, though RS is slightly more accurate. 
 On Adaptive LSB, the CNN exhibits less catastrophic degradation, making it the preferred detector below $r = 0.50$. 
-Finally, for Matching LSB, only the CNN shows any degradation at all, since RS cannot distinguish between signals at any rate.
+Finally, for Matching LSB, only the CNN shows any measurable degradation at all, as RS cannot distinguish the signals at any tested rate.
 
-\subsection*{5.3 Relation to Previous Work}
+\section{Relation to Previous Work}
 
-Three common ideas in existing research on steganalysis are reaffirmed in these results. 
-As previously established by \textcite{Fridrich2001} and \textcite{Fridrich2002}), RS analysis is an effective means of identifying classical LSB replacement, with this identification remaining effective even when significant rates of embedded data exist. 
-As also predicted by \textcite{Ker2005}, RS-type detectors do not work well with LSB Matching due to an inherent lack of structural compatibility. 
-As suggested by \textcite{Qian2015}, \textcite{Wang2021} and \textcite{Apau2024}, CNN-based steganalysis methods best generalize across embedding techniques, whereas handcrafted statistical tests cannot.
+Three common assertions in existing steganalysis research are reaffirmed by these results. 
+First, as established by \textcite{Fridrich2001} and \textcite{Fridrich2002}, RS analysis is a highly effective means of identifying classical 
+LSB replacement, remaining robust across varying rates of embedded data. 
+Second, as predicted by \textcite{Ker2005}, RS-type detectors fail against LSB Matching due to an inherent lack of structural compatibility with 
+the embedding mechanics. 
+Third, as suggested by \textcite{Qian2015}, \textcite{Wang2021}, and \textcite{Apau2024}, CNN-based steganalysis methods generalize much better 
+across diverse embedding techniques, overcoming the limitations of rigid, handcrafted statistical tests.
 
-The study shows that the traditional steganalysis approach (e.g., RS) is more successful on the tested payload rates. It was established that RS is the best option and demonstrates strength in its operating range as steganalysis techniques have broadened due to neural approaches. 
-Thus, inexperienced practitioners may benefit from the use of RS, while a CNN would be useful if an adaptive method or Matching scheme were used to embed information.
+This study confirms that the traditional steganalysis approach (RS) is highly successful within its intended operating range, 
+maintaining superiority over neural approaches for basic spatial embeddings. 
+Therefore, practitioners may confidently rely on RS analysis to detect plain LSB replacement in lossless PNGs, while reserving CNN methods for 
+scenarios involving complex, adaptive, or matching-based embedding schemes.
 
-Because of the results of this study, one may practice RS to detect plain LSB replacement steganography on a fitted lossless PNG, while a CNN method may be useful.
+\section{Limitations}
 
-\subsection*{5.4 Limitations}
+Numerous limitations apply to the conclusions drawn by this study, specifically regarding the reliance on a single cover source (BOSSBase 1.01) and a 
+single image modality (grayscale images re-encoded as PNGs).
+\textcite{Sedighi2016} found that the statistical characteristics of cover images significantly influence both embedding and detection performance. 
+Therefore, the absolute accuracies obtained in this research should not be directly extended to other cover sources—such as consumer photographs or 
+screen captures—without further empirical validation. 
 
-Numerous limitations apply to the conclusions drawn by this study regarding cover source and image modalities from one cover source (BOSSBase 1.01) and one specific image modality (grayscale information and subsequently re-encoded as PNG).
-\textcite{Sedighi2016} found that the statistical characteristics of the cover image types significantly influenced both embedding and detection performance, therefore, the absolute accuracy obtained from this research should not be extended beyond BOSSBase to other cover sources such as consumer photographs or screen captures without further testing to verify accuracy. 
-In addition, the payload rates that were examined during this research are relatively high compared to other contemporary steganalysis studies (which often go down to 0.1 bpp or lower). 
-Therefore, it will be interesting to see how degradation in performance occurs for the two methods when using even smaller payload sizes for (i.e., $< 0.05$) and whether the relative advantage of CNN's becomes apparent when the small payload sizes are used relative to other cover sources.
+Furthermore, the payload rates examined in this research are relatively high compared to contemporary steganalysis studies 
+(which often evaluate payloads down to 0.1 bpp or lower). 
+It would be highly relevant to observe how performance degradation occurs for these two methods when utilizing significantly smaller 
+payloads (i.e., $< 0.05$ bpp), and to determine whether the relative advantage of CNNs becomes even more pronounced at these near-invisible 
+payload sizes across varied cover sources.
 
-\subsection*{5.5 Future Work}
+\section{Future Work}
 
-The limitations mentioned above lead naturally to three avenues for future research directions. 
-The first avenue is to expand the range of payloads down to the sub-0.1 bpp range so that researchers are able to evaluate whether or not the degradation of CNN(s) is more graceful at lower payloads. 
-The second avenue is to broaden the set of cover sources, such as JPEG decompressed to PNG, phone images, and synthetic images, to address the cover source dependence highlighted by \textcite{Sedighi2016} and to provide a more stringent assessment of the generalization hypothesis in this domain. 
-The third avenue is the comparison of classical LSB-based approaches to content adaptive approaches, including S-UNIWARD and MiPOD, to allow alignment of the comparisons with current steganalysis benchmarking procedures, and to ultimately provide researchers a means of determining if RS analysis has remaining utility in these modern contexts or whether only neural network detectors can be deployed.
+The limitations mentioned above naturally lead to three primary avenues for future research. 
+The first avenue is to expand the range of payloads down to the sub-0.1 bpp range, allowing researchers to evaluate whether the degradation of 
+CNNs remains graceful at extremely low embedding rates compared to statistical methods. 
+The second avenue is to broaden the set of cover sources to include JPEGs decompressed to PNGs, smartphone photographs, and synthetically generated images. 
+This would directly address the cover source dependency highlighted by \textcite{Sedighi2016} and provide a more stringent assessment of the CNN 
+generalization hypothesis in real-world domains. 
+The third avenue involves expanding the comparison to include highly modern, content-adaptive approaches such as S-UNIWARD and MiPOD. 
+Aligning future comparisons with contemporary steganalysis benchmarking procedures will ultimately help determine whether traditional RS analysis 
+retains any practical utility in modern contexts, or if the field must rely entirely on neural network detectors.
 
-In addition to advancing the state of knowledge about CNNs and cover source properties, researchers will also have the opportunity to produce confusion matrices, ROC curves, and error rates by class that are matched to CNN outputs, allowing researchers to conduct proper FPR comparisons at equivalent operating points.
+\section{Broader Impact}
 
-\subsection*{5.6 Broader Impact}
+The major implication of these findings is that the choice of methodology in applied steganalysis must be dictated by the specific threat model, 
+rather than defaulting to the most "in vogue" deep learning method available. 
+RS analysis remains a powerful, highly interpretable, and computationally efficient detector for plain LSB replacement. 
+Its superior performance against low and high payloads in this analysis firmly endorses its continued use within forensic pipelines 
+targeting basic steganographic content. 
 
-The major implication of these findings is that the choice of method in applied steganalysis should depend on the specific threat model and not simply upon an arbitrary choice based on the latest "in vogue" method available. 
-RS analysis remains a very strong, interpretable, and computationally efficient detector for plain LSB replacement embeds, and its above-average performance against high payloads in this analysis continues to endorse its use within forensic pipelines that target such type of content. 
-When the target is an embed created using an adaptive method or Matching LSB, then a machine learning approach must be adopted; the findings of the CNN in the current analysis demonstrate that CNNs can recover usable signals in contexts where RS analysis would be blind, despite falling below the upper bounds of detection thresholds identified within the published literature using more sophisticated architectures and training strategies. 
-Therefore, these two methods should not be viewed as competitors, but as complementary, and a viable detection strategy would be to run both methods in parallel and combine the results from both systems.
+However, when the target is an embedding created using an adaptive method or LSB Matching, a machine learning approach must be adopted. 
+The CNN findings in this analysis demonstrate that deep learning can recover usable signals in contexts where RS analysis is completely blind, 
+even if the model's accuracy falls slightly below the upper bounds reported in literature that utilizes massive computational resources and highly complex architectures. 
+Ultimately, these two methods should not be viewed strictly as competitors, but as complementary tools. 
+A highly viable real-world detection strategy would involve running both methods in parallel and ensembling the results to cover a broader 
+spectrum of steganographic threats.
 
-\subsection*{5.7 Ethical Considerations}
+\section{Ethical Considerations}
 
-The empirical findings allow for a reflection with more nuance. The results confirm that the simple and computationally inexpensive RS analysis remains sufficient against LSB techniques such as, Sequential LSB, Random LSB. 
-It means that practitioners do not need access to specialized, and expensive, hardware or large training datasets to address a significant share of real-world cases. The result also show potential exploits by adversaries that could use Matching LSB, with which both RS analysis and our CNN struggled with at low payloads (r = 0.25). 
-We consider this disclosure acceptable because the embedding strategies examined are long-established in the public literature \cite{Sharp2001} \cite{Ker2005} \cite{Luo2010} and because the study contributes no new embedding method. This research makes comparisons using a common dataset (BOSSBase 1.01) used in academia and adheres to the principles of integrity described in Section 3.1.
+These empirical findings allow for a nuanced ethical reflection. The results confirm that the simple, computationally inexpensive 
+RS analysis remains highly sufficient against foundational techniques such as Sequential and Random LSB. 
+This means that forensic practitioners and law enforcement do not necessarily need access to specialized, expensive hardware or 
+massive training datasets to address a significant share of basic real-world cases. 
+
+However, the results also highlight potential exploits by adversaries utilizing Matching LSB, which both RS analysis and our CNN struggled to 
+detect reliably at low payloads ($r = 0.25$). 
+We consider the disclosure of these vulnerabilities acceptable because the embedding strategies examined have been long-established in public 
+literature \cite{Sharp2001, Ker2005, Luo2010}, and this study contributes no novel evasion methods. 
+This research utilizes a standard academic dataset (BOSSBase 1.01) and strictly adheres to the principles of scientific integrity and defensive 
+security research outlined in Chapter 3.
