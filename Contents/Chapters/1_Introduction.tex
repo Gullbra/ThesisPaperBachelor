@@ -3,39 +3,38 @@
 
 In the age of widespread digital communication and increasing concerns about data privacy, 
 the methods of concealing information have become vital in computer and systems sciences research. 
-Steganography, derived from the Greek words \textit{steganos} (covered) and \textit{graphein} (writing), 
+
+Steganography, derived from the Greek word \textit{steganos} (covered) and the word \textit{graphein} (writing), 
 is defined as the practice of concealing information inside often-innocent digital media, such as images, 
-for secret communication \cite{Fridrich2002}. While cryptography encrypts information 
-in order to make it unreadable, steganography is concerned with concealing the 
+for secret communication \cite{Fridrich2002}.
+While cryptography encrypts information in order to make it unreadable, steganography conceals the 
 very existence of the information \cite{Fridrich2002}, making it valuable for 
 scenarios where the attention drawn to encrypted messages would be undesirable.
 
 Steganographic methods have a number of serious implications concerning security and forensics. 
 Although they can be used for legal purposes, such as digital watermarking used for copyright protection, 
-secure communication in countries that ban or restrict encryption, and privacy preservation, 
-these methods can be used for other malicious tasks as well \cite{Goud2025}, 
-which makes reliable detection a matter of broader societal interest. 
-Research into steganalysis therefore contributes directly to the work of forensic specialists and 
-cybersecurity practitioners tasked with uncovering hidden communication channels 
-that would otherwise evade conventional inspection.
+secure communication in countries that ban or restrict encryption, these methods can be used for malicious tasks as well \cite{Fridrich2002, Eaton2016}.
+Malicious actors have been known to use steganography to covertly communicate, conceal incriminating evidence, and 
+distribute illicit content such as terrorist training manuals and child pornography \cite{Eaton2016}.
+This makes the ability to detect steganographically hidden data important to law enforcement, 
+counterintelligence, and other cybersecurity practitioners and digital forensic investigators \cite{Eaton2016}.
 
-The countermeasure to steganography is steganalysis. 
-An ongoing ``arms race'' has driven the development of numerous techniques aimed at reliably 
-detecting the presence of hidden data in digital media. 
-These detection methods fall primarily into two categories.
+The countermeasure to steganography is steganalysis.
+Its objective is to determine whether digital media contains embedded data \cite{Fridrich2002}.
+Steganography and steganalysis are adversarial fields in which developments in one drive developments in the other.
+Although steganalysis methods can be classified in several different ways \cite{Selvaraj2021}, 
+this study focuses on two different approaches to steganalysis: traditional statistical techniques and deep-learning-based techniques.
 
-The first category consists of traditional statistical methods, such as Regular-Singular (RS) analysis, 
-which detects disruptions in the spatial correlations and local smoothness that random LSB embedding 
-introduces to pixel data \cite{Fridrich2001, Manoharan2008}.
+Traditional statistical methods, such as Regular-Singular (RS) analysis, detect disruptions in the spatial correlations and 
+local smoothness that LSB embedding introduces into pixel data \cite{Fridrich2001, Manoharan2008}.
 
-The second, more recent category employs machine learning—specifically deep learning. 
-Models such as Convolutional Neural Networks (CNNs) are trained to detect the fine, 
-high-dimensional patterns and noise artifacts introduced into stego images \cite{Qian2015}.
+Deep-learning-based steganalysis uses machine learning models, such as Convolutional Neural Networks (CNNs), 
+to detect the subtle, high-dimensional patterns and noise artifacts introduced by steganographic embedding \cite{Qian2015}. 
 
 The advancements in deep learning research have resulted in a paradigm shift for steganalysis research with a 
-tendency to regard Neural Networks as the norm for solving steganalytic detection tasks. 
+tendency to regard Neural Networks as the norm for solving steganalytic detection tasks \cite{Qian2015, Selvaraj2021}. 
 However, this shift might neglect computational complexity and the baseline detection accuracies of older methods.
-Although the use of Convolutional Neural Networks (CNNs) with state-of-the-art performances for complex 
+Although the use of Convolutional Neural Networks (CNNs) with state-of-the-art performance for complex 
 and adaptive steganographic attacks is compelling, their superiority over traditional methods for basic LSB embedding schemes 
 within lossless images is still worthy of research.
 
@@ -53,11 +52,11 @@ and these are outside our scope.
 \subsection{Spatial Domain LSB Substitution}
 This research aims to compare the baseline effectiveness of a statistical method (RS-analysis) against a Deep Learning model (CNN) in the spatial domain. 
 While complex, highly adaptive steganographic algorithms (e.g., HUGO \cite{pevny2010using}, S-UNIWARD \cite{holub2014universal}) fall outside the scope of this comparison due to 
-requiring entirely different steganalytic approaches, foundational spatial techniques, such as basic sobel based edge adapted steganography, is included to provide a comprehensive baseline.
+requiring entirely different steganalytic approaches, foundational spatial techniques, such as basic Sobel-based edge-adapted steganography, is included to provide a comprehensive baseline.
 
 \subsection{Dataset and Color Channels}
 The BOSSBase dataset is widely used in the field of steganalysis research, ensuring reproducibility \cite{bas2011break, Sedighi2016}. 
-The datasets images are in a lossless format (.png), and as the images in the dataset are in grayscale, 
+The dataset's images are in a lossless format (.png), and as the images in the dataset are in grayscale, 
 the embedding artifacts are isolated within the luminance values.
 
 \subsection{Payload Granularity}
